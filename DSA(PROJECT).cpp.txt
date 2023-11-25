@@ -1,0 +1,269 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Book
+{
+public:
+    string title;
+    string author;
+    string ISBN;
+    int publicationYear;
+};
+
+class Node
+{
+public:
+    Book data;
+    Node* prev;
+    Node* next;
+    Node()
+    {
+        prev = NULL;
+        next = NULL;
+    }
+
+    void addBook(Node * &head,Book book)
+    {
+        Node* n = new Node();
+        n->data = book;
+        if (head == NULL)
+        {
+            head = n;
+        }
+        else
+        {
+            Node* temp = head;
+            while (temp->next != NULL)
+            {
+                temp = temp->next;
+            }
+            temp->next = n;
+            n->prev = temp;
+        }
+    }
+
+    void deleteBook(Node * &head,string ISBN)
+    {
+        if (head == NULL)
+        {
+            cout << "No Books in the Library" << endl;
+            return;
+        }
+
+        Node* temp = head;
+        while (temp != NULL)
+        {
+            if (temp->data.ISBN == ISBN)
+            {
+                if (temp->prev != NULL)
+                {
+                    temp->prev->next = temp->next;
+                }
+                else
+                {
+                    head = temp->next;
+                }
+                if (temp->next != NULL)
+                {
+                    temp->next->prev = temp->prev;
+                }
+                delete temp;
+                cout << "Book with ISBN " << ISBN << " deleted." << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+        cout << "Book with ISBN " << ISBN << " not found." << endl;
+    }
+
+    void searchBook(Node * &head,string ISBN)
+    {
+        if (head == NULL)
+        {
+            cout << "No Books in the Library" << endl;
+            return;
+        }
+
+        Node* temp = head;
+        while (temp != NULL)
+        {
+            if (temp->data.ISBN == ISBN)
+            {
+                cout << "Book found in the Library" << endl;
+                cout << "Title: " << temp->data.title << endl;
+                cout << "Author: " << temp->data.author << endl;
+                cout << "Publication Year: " << temp->data.publicationYear << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+        cout << "Book with ISBN " << ISBN << " not found in the library!" << endl;
+    }
+
+    void editBook(Node * &head,string ISBN)
+    {
+        if (head == NULL)
+        {
+            cout << "No Books in the Library" << endl;
+            return;
+        }
+
+        Node* temp = head;
+        while (temp != NULL)
+        {
+            if (temp->data.ISBN == ISBN)
+            {
+                int option;
+                cout << "Book found in the Library" << endl;
+                cout << "Which info. do you want to edit?" << endl;
+                cout << "Press 1 to change Title" << endl;
+                cout << "Press 2 to change Publication Year" << endl;
+                cout << "Press 3 to change Author Name" << endl;
+                cout << "Enter your option: ";
+                cin >> option;
+
+                if (option == 1)
+                {
+                    cout << "Enter new Book Title: ";
+                    cin >> temp->data.title;
+                }
+                else if (option == 2)
+                {
+                    cout << "Enter new Book Publication Year: ";
+                    cin >> temp->data.publicationYear;
+                }
+                else if (option == 3)
+                {
+                    cout << "Enter new Book Author Name: ";
+                    cin >> temp->data.author;
+                }
+                else
+                {
+                    cout << "Invalid Option" << endl;
+                    return;
+                }
+                cout << "Book information updated." << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+        cout << "Book with ISBN " << ISBN << " not found in the library!" << endl;
+    }
+
+    void displayAllBooks(Node *head)
+    {
+        if (head == NULL)
+        {
+            cout << "No Books in the Library" << endl;
+            return;
+        }
+
+        Node* temp = head;
+        while (temp != NULL)
+        {
+            cout << "Title: " << temp->data.title << endl;
+            cout << "Author: " << temp->data.author << endl;
+            cout << "ISBN: " << temp->data.ISBN << endl;
+            cout << "Publication Year: " << temp->data.publicationYear << endl;
+            cout << "-----------------------" << endl;
+            temp = temp->next;
+        }
+    }
+};
+
+int main()
+{
+    cout << "LIBRARY MANAGEMENT SYSTEM MENU" << endl;
+    cout << "-------------------------------------------------------" << endl;
+    cout << "Press 1 to Add New Book in Library" << endl;
+    cout << "Press 2 to Delete Book in Library" << endl;
+    cout << "Press 3 to Display the Books in Library" << endl;
+    cout << "Press 4 to Search the Book in Library" << endl;
+    cout << "Press 5 to Edit the Book Information in Library" << endl;
+    cout << "Press 6 to Exit" << endl;
+    cout << "-------------------------------------------------------" << endl;
+
+    Node n;
+    Node *head = NULL;
+    int choice = 0;
+
+    Book book1;
+    book1.title = "Book-1";
+    book1.author = "Ali";
+    book1.ISBN = "ISBN-1";
+    book1.publicationYear = 2021;
+    n.addBook(head,book1);
+
+    Book book2;
+    book2.title = "Book-2";
+    book2.author = "Farukh";
+    book2.ISBN = "ISBN-2";
+    book2.publicationYear = 2011;
+    n.addBook(head,book2);
+
+    Book book3;
+    book3.title = "Book-3";
+    book3.author = "Jawad";
+    book3.ISBN = "ISBN-3";
+    book3.publicationYear = 2023;
+    n.addBook(head,book3);
+    while (choice != 6)
+    {
+        s:
+        cout << "Enter your choice: ";
+        cin  >> choice;
+        cout << endl;
+
+       if(choice == 1)
+        {
+            Book book;
+            cout << "Enter the Book Title: ";
+            cin  >> book.title;
+            cout << "Enter the Author Name: ";
+            cin  >> book.author;
+            cout << "Enter the Book ISBN: ";
+            cin  >> book.ISBN;
+            cout << "Enter the Book Publish Year: ";
+            cin  >> book.publicationYear;
+            n.addBook(head,book);
+            cout << "Book added to the Library." << endl;
+        }
+        else if(choice == 2)
+        {
+            string ISBN;
+            cout << "Enter the Book ISBN: ";
+            cin  >> ISBN;
+            n.deleteBook(head,ISBN);
+        }
+        else if(choice == 3)
+        {
+            n.displayAllBooks(head);
+        }
+        else if(choice == 4)
+        {
+            string ISBN;
+            cout << "Enter the Book ISBN: ";
+            cin  >> ISBN;
+            n.searchBook(head,ISBN);
+        }
+        else if(choice == 5)
+        {
+            string ISBN;
+            cout << "Enter the Book ISBN: ";
+            cin  >> ISBN;
+            n.editBook(head,ISBN);
+        }
+        else if(choice == 6)
+        {
+            cout << "Thank You" << endl;
+            break;
+        }
+        else
+        {
+            cout << "Invalid choice" << endl;
+            goto s;
+        }
+    }
+    return 0;
+}
